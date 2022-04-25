@@ -52,6 +52,18 @@ Extra =
     <button onclick="hamburger ()">Hamburger</button>
     <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
     <script>
+
+      function foldChoices (a) {
+	  console.log (a);
+	  let condiments = [];
+	  let extras = [];
+	  a.forEach (choiceObj => {
+	      choiceObj.condiments [0] && condiments.push (choiceObj.condiments [0]);
+	      choiceObj.extras [0] && extras.push (choiceObj.extras [0]);
+	  });
+	  return {condiments: condiments, extras: extras};
+      }
+
       let hamburger_hooks = {
           // bits of action code ("semantics") to hang off
           // like Christmas tree ornaments from the main parse
@@ -61,13 +73,15 @@ Extra =
           Main: function (p) { return p.hamburger (); },
           Phrase_longphrase: function (sI, sWant, sA, sHamburger, sWith, choiceArray) {
 	      
-              return {choiceArray};
+              let c = foldChoices (choiceArray.hamburger ());
+	      c.long = true;
+	      return c;
           },
           Phrase_shortphrase: function (sI, sWant, sA, sCheeseburger) {
-              return { condiments: [], extras: [] };
+              return { condiments: [], extras: [], short: true};
           },
-          Choice: function (optAnd, thing) {
-              return { content: thing.hamburger ().content };
+          Choice: function (optAnd, ch) {
+              return ch.hamburger ();
           },
           Condiment_ketchup: function (c) {
               return { condiments: ["ketchup"],  extras: [] };
@@ -123,7 +137,10 @@ Extra =
               let treeWalker = hookMap (cst);
               let obj = treeWalker.hamburger ();
               document.getElementById ('output').innerHTML 
-                  = obj.toString ();
+                  = obj.flat (1000).map (obj => {
+		      console.log (obj);
+		      return obj.toString ();
+		  }).join ('\n');
           } else {
               document.getElementById ('output').innerHTML 
                   = 'FAILED';

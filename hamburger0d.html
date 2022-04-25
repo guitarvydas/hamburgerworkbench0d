@@ -54,7 +54,6 @@ Extra =
     <script>
 
       function foldChoices (a) {
-	  console.log (a);
 	  let condiments = [];
 	  let extras = [];
 	  a.forEach (choiceObj => {
@@ -137,9 +136,8 @@ Extra =
               let treeWalker = hookMap (cst);
               let obj = treeWalker.hamburger ();
               document.getElementById ('output').innerHTML 
-                  = obj.flat (1000).map (obj => {
-		      console.log (obj);
-		      return obj.toString ();
+                  = obj.map (obj => {
+		      return `CONDIMENTS: ${obj.condiments} EXTRAS: ${obj.extras}`;
 		  }).join ('\n');
           } else {
               document.getElementById ('output').innerHTML 

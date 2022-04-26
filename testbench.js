@@ -1,13 +1,3 @@
-const handling = require('./handling');
-const deliver = require('./containerDeliver');
-const routing = require('./routing');
-const runnable = require('./runnable');
-
-
-const htmlbutton = require ('./htmlbutton');
-const phrasefaker = require ('./phrasefaker');
-const ordertaker = require ('./ordertaker');
-
 var signature = {
     name: "Test Bench",
     inputs: [],
@@ -25,8 +15,8 @@ function finish (me) {
 var protoImplementation = {
     name: "Test Bench",
     kind: "container",
-    handler: handling.deliverInputMessageToAllChildrenOfSelf,
-    route: routing.route,
+    handler: deliverInputMessageToAllChildrenOfSelf,
+    route: route,
     begin: begin,
     finish: finish
 }       
@@ -74,16 +64,12 @@ function makeConnections (me) {
     ];
 }
 
-function TestBench (container) {
-    let me = new runnable.Container (signature, protoImplementation, container);
-    me.children = makeChildren (container);
-    me.nets = makeNets (container);
-    me.connections = makeConnections (container);
-    me.deliver_input_from_container_input_to_child_input = deliver.deliver_input_from_container_input_to_child_input;
-    me.deliver_input_from_container_input_to_me_output = deliver.deliver_input_from_container_input_to_me_output;
-    return me;
+function TestBench () {
+    let tb = new runnable.Container (signature, protoImplementation, null);
+    tb.children = makeChildren (tb);
+    tb.nets = makeNets (tb);
+    tb.connections = makeConnections (tb);
+    tb.deliver_input_from_container_input_to_child_input = deliver.deliver_input_from_container_input_to_child_input;
+    tb.deliver_input_from_container_input_to_me_output = deliver.deliver_input_from_container_input_to_me_output;
+    return tb;
 }
-
-exports.TestBench = TestBench;
-
-

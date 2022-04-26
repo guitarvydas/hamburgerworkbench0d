@@ -11,12 +11,6 @@
 
     <h1>Hamburger 0D Workbench</h1>
 
-
-    <p>source:</p>
-    <textarea id="source" rows="7" cols="90" placeholder="input">
-      I Want A Cheeseburger
-      I Want A Hamburger With Cheese And Special Sauce And Ketchup
-    </textarea>
     <p>output:</p>
     <textarea id="output" rows="7" cols="90" placeholder="output">
     </textarea>
@@ -28,22 +22,22 @@
     <br>
     <button onclick="htmlbutton.handler (htmlbutton, null)">Hamburger</button>
     <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
+    <script src="htmlbutton.js"></script>
+    <script src="handling"></script>
+    <script src="containerDeliver"></script>
+    <script src="routing"></script>
+    <script src="runnable"></script>
+    <script src="phrasefaker.js"></script>
+    <script src="phraseparser.js"></script>
+    <script src="ordertaker.js"></script>
+    <script src="testbench.js"></script>
     <script>
       
-      var protoHTMLbutton = require ('./htmlbutton');
-      var htmlbutton = new protoHTMLbutton.HTMLbutton (me);
-
-      var protoPhraseFaker = require ('./phrasefaker');
-      var phraseFaker = new protoPhraseFaker.PhraseFaker (me);
-
-      var protoPhraseParser = require ('./phraseparser');
-      var phraseParser = new protoPhraseParser.PhraseParser (me);
-
-      var protoOrderTaker = require ('./ordertaker');
-      var orderTaker = new protoOrderTaker.OrderTaker (me);
-
-      var protoTestBench = require ('./testbench');
-      var testBench = new protoOrderTaker.TestBench (null);
+      var testBench = new TestBench (null);
+      var htmlbutton = new HTMLbutton (testBench);
+      var phraseFaker = new PhraseFaker (testBench);
+      var phraseParser = new PhraseParser (testBench);
+      var orderTaker = new OrderTaker (testBench);
 
     </script>
   </body>

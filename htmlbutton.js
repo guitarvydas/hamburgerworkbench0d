@@ -5,7 +5,7 @@ function handler_HTMLbutton (me, message) {
     me.container.wakeup ();
 }
 
-var signature = {
+var HTMLbutton_signature = {
     name: "HTMLbutton",
     inputs: [],
     outputs: [
@@ -13,7 +13,7 @@ var signature = {
     ]
 };
 
-let protoImplementation = {
+let HTMLbutton_protoImplementation = {
     name: "HTMLbutton",
     kind: "leaf",
     handler: handler_HTMLbutton,
@@ -22,10 +22,8 @@ let protoImplementation = {
 };
 
 function HTMLbutton (container) {
-    let me = new runnable.Leaf (signature, protoImplementation, container, signature.name);
+    let me = new runnable.Leaf (HTMLbutton_signature, HTMLbutton_protoImplementation, container);
     return me;
 }
 
-exports.HTMLbutton = HTMLbutton;
-    
     

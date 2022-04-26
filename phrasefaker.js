@@ -5,7 +5,7 @@ function handler_phraseFaker (me, message) {
     me.send ("short phrase", true);
 }
 
-var signature = {
+var PhraseFaker_signature = {
     name: "Phrase Faker",
     inputs: [{name: "go", structure: []}],
     outputs: [
@@ -14,7 +14,7 @@ var signature = {
     ]
 };
 
-let protoImplementation = {
+let PhraseFaker_protoImplementation = {
     name: "Phrase Faker",
     kind: "leaf",
     handler: handler_phraseFaker,
@@ -23,10 +23,8 @@ let protoImplementation = {
 };
 
 function PhraseFaker (container) {
-    let me = new runnable.Leaf (signature, protoImplementation, container, signature.name);
+    let me = new runnable.Leaf (signature, PhraseFaker_protoImplementation, container);
     return me;
 }
-
-exports.PhraseFaker = PhraseFaker;
     
     

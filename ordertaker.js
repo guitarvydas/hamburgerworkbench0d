@@ -1,12 +1,4 @@
-const handling = require('./handling');
-const deliver = require('./containerDeliver');
-const routing = require('./routing');
-const runnable = require('./runnable');
-
-
-const phraseparser = require ('./phraseparser');
-
-var signature = {
+var OrderTaker_signature = {
     name: "Order Taker",
     inputs: [
         { name: "phrase", structure: ["phrase"] }
@@ -16,24 +8,14 @@ var signature = {
     ]
 };
 
-function begin (me) {
-}
-
-function finish (me) {
-}
-
-var protoImplementation = {
+var OrderTaker_protoImplementation = {
     name: "Order Taker",
     kind: "container",
-    handler: handling.deliverInputMessageToAllChildrenOfSelf,
-    route: routing.route,
-    begin: begin,
-    finish: finish
 }       
 
     
 function makeChildren (me) {
-    var child1 = new phraseparser.PhraseParser(me);
+    var child1 = new PhraseParser(me);
     return [
         {"name": "phrase parser", "runnable": child1}
     ];
@@ -66,7 +48,7 @@ function makeConnections (me) {
 }
 
 function OrderTaker (container) {
-    let me = new runnable.Container (signature, protoImplementation, container);
+    let me = new runnable.Container (signature, OrderTaker_protoImplementation, container);
     me.children = makeChildren (container);
     me.nets = makeNets (container);
     me.connections = makeConnections (container);
@@ -74,5 +56,3 @@ function OrderTaker (container) {
     me.deliver_input_from_container_input_to_me_output = deliver.deliver_input_from_container_input_to_me_output;
     return me;
 }
-
-exports.OrderTaker = OrderTaker;

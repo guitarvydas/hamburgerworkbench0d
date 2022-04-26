@@ -111,7 +111,7 @@ function handler_phraseParser (me, message) {
     }
 }
 
-var signature = {
+var PhraseParser_signature = {
     name: "Phrase Parser",
     inputs: [{name: "phrase", structure: ["phrase"]}],
     outputs: [
@@ -122,7 +122,7 @@ var signature = {
     ]
 };
 
-let protoImplementation = {
+let PhraseParser_protoImplementation = {
     name: "Phrase Parser",
     kind: "leaf",
     handler: handler_phraseParser,
@@ -131,10 +131,9 @@ let protoImplementation = {
 };
 
 function PhraseParser (container) {
-    let me = new runnable.Leaf (signature, protoImplementation, container, signature.name);
+    let me = new runnable.Leaf (signature, PhraseParser_protoImplementation, container);
     return me;
 }
 
-exports.PhraseParser = PhraseParser;
     
     

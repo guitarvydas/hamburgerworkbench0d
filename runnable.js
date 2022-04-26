@@ -54,8 +54,16 @@ function Leaf (signature, protoImplementation, container, name) {
 
 function Container (signature, protoImplementation, container, name) {
     let me = new Runnable (signature, protoImplementation, container, name);
-    me.conclude = container.conclude;
-    me.route = routing.route;
+    if (container) {
+	me.conclude = container.conclude;
+    } else {
+	me._done = false;
+	me.conclude = function () { 
+            me.container._done = true; 
+	};
+	me.done = function () {return me._done;};
+    }
+    me.route = route;
     me.step = function () {
         // Container tries to step all children,
         // if no child was busy, then Container looks at its own input
@@ -87,9 +95,9 @@ function Container (signature, protoImplementation, container, name) {
         });
     };
     me.self_produced_output = function () { return (me.hasOutputs ()); };
-    me.find_connection = fc.find_connection;
+    me.find_connection = find_connection;
     me.find_connection_in__me = function (_me, child, etag) {
-	return fcim.find_connection_in__me (this, child.name, etag);
+	return find_connection_in__me (this, child.name, etag);
     };
     me.lookupChild = function (name) {
 	var _ret = null;
@@ -104,8 +112,8 @@ function Container (signature, protoImplementation, container, name) {
 	};
 	return _ret;
     }
-    handler = handling.deliverInputMessageToAllChildrenOfSelf,
-    route = routing.route,
+    handler = deliverInputMessageToAllChildrenOfSelf,
+    route = route,
     begin = function () {};
     finish = function () {};
     return me;

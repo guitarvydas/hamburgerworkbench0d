@@ -1,5 +1,3 @@
-const runnable = require('./runnable');
-
 const grammar = String.raw`
 hamburger {
 Main = Phrase+
@@ -131,7 +129,7 @@ let PhraseParser_protoImplementation = {
 };
 
 function PhraseParser (container) {
-    let me = new runnable.Leaf (signature, PhraseParser_protoImplementation, container);
+    let me = new Leaf (signature, PhraseParser_protoImplementation, container);
     return me;
 }
 

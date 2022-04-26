@@ -23,9 +23,9 @@ var protoImplementation = {
 
     
 function makeChildren (me) {
-    var child1 = new htmlbutton.HTMLbutton(me);
-    var child2 = new phrasefaker.PhraseFaker(me);
-    var child3 = new ordertaker.OrderTaker(me);
+    var child1 = new HTMLbutton(me);
+    var child2 = new PhraseFaker(me);
+    var child3 = new OrderTaker(me);
     return [
         {name: "html button", runnable: child1},
         {name: "phrase faker", runnable: child2},

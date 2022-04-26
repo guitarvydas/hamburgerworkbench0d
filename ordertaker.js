@@ -48,7 +48,7 @@ function makeConnections (me) {
 }
 
 function OrderTaker (container) {
-    let me = new runnable.Container (signature, OrderTaker_protoImplementation, container);
+    let me = new Container (signature, OrderTaker_protoImplementation, container);
     me.children = makeChildren (container);
     me.nets = makeNets (container);
     me.connections = makeConnections (container);

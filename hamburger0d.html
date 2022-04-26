@@ -49,7 +49,7 @@ Extra =
 
 
     <br>
-    <button onclick="hamburger ()">Hamburger</button>
+    <button onclick="htmlbutton.handler (htmlbutton, null)">Hamburger</button>
     <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
     <script>
 
@@ -129,21 +129,33 @@ Extra =
           }
       }
 
-      function hamburger () {
-          var [cst, hookMap] = parse ();      
+      function transpileHamburgerOrder (phrase) {
+          var [cst, hookMap] = parsePhrase (phrase);      
           if (cst.succeeded ()) {
               hookMap.addOperation ('hamburger', hamburger_hooks);
               let treeWalker = hookMap (cst);
-              let obj = treeWalker.hamburger ();
-              document.getElementById ('output').innerHTML 
-                  = obj.map (obj => {
-		      return `CONDIMENTS: ${obj.condiments} EXTRAS: ${obj.extras}`;
-		  }).join ('\n');
+              let oorder = treeWalker.hamburger ();
+	      return order;
           } else {
               document.getElementById ('output').innerHTML 
                   = 'FAILED';
           }
       }
+      
+      var protoHTMLbutton = require ('./htmlbutton');
+      var htmlbutton = new protoHTMLbutton.HTMLbutton (me);
+
+      var protoPhraseFaker = require ('./phrasefaker');
+      var phraseFaker = new protoPhraseFaker.PhraseFaker (me);
+
+      var protoPhraseParser = require ('./phraseparser');
+      var phraseParser = new protoPhraseParser.PhraseParser (me);
+
+      var protoOrderTaker = require ('./ordertaker');
+      var orderTaker = new protoOrderTaker.OrderTaker (me);
+
+      var protoTestBench = require ('./testbench');
+      var testBench = new protoOrderTaker.TestBench (null);
 
     </script>
   </body>

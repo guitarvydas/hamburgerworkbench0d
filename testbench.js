@@ -62,11 +62,11 @@ function makeConnections (me) {
         {"sender":{"name":"phrase faker","etag":"short phrase"},
          "net":"⇒₂",
          "receivers": [{"name":"order taker","etag":"phrase"}]
-        }
+        },
         {"sender":{"name":"phrase faker","etag":"long phrase"},
          "net":"⇒₃",
          "receivers": [{"name":"order taker","etag":"phrase"}]
-        }
+        },
         {"sender":{"name":"order taker","etag":"food order"},
          "net":"⇒₄",
          "receivers": [{"name":"_me","etag":"food order"}]

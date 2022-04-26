@@ -57,7 +57,7 @@ function makeConnections (me) {
         {"sender":{"name":"phrase parser","etag":"order no choices"},
          "net":"⇒₂",
          "receivers": [{"name":"_me","etag":"food order"}]
-        }
+        },
         {"sender":{"name":"phrase parser","etag":"order with choices"},
          "net":"⇒₃",
          "receivers": [{"name":"_me","etag":"food order"}]

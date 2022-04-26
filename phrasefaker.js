@@ -1,5 +1,3 @@
-const runnable = require('./runnable');
-
 function handler_phraseFaker (me, message) {
     // first-order testing - does the phraseFaker work at all?
     me.send ("short phrase", true);
@@ -23,7 +21,7 @@ let PhraseFaker_protoImplementation = {
 };
 
 function PhraseFaker (container) {
-    let me = new runnable.Leaf (signature, PhraseFaker_protoImplementation, container);
+    let me = new Leaf (signature, PhraseFaker_protoImplementation, container);
     return me;
 }
     

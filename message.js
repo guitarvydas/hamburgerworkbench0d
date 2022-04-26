@@ -45,7 +45,3 @@ function OutputMessageNoTrace (etag, v, who, target, tracer) {
     this.kind = "o";
 }
 
-exports.InputMessage = InputMessage;
-exports.InputMessageNoTrace = InputMessageNoTrace;
-exports.OutputMessage = OutputMessage;
-exports.OutputMessageNoTrace = OutputMessageNoTrace;

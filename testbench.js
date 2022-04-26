@@ -65,7 +65,7 @@ function makeConnections (me) {
 }
 
 function TestBench () {
-    let tb = new runnable.Container (signature, protoImplementation, null);
+    let tb = new Container (signature, protoImplementation, null);
     tb.children = makeChildren (tb);
     tb.nets = makeNets (tb);
     tb.connections = makeConnections (tb);

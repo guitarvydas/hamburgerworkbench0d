@@ -1,17 +1,10 @@
-let queue = require ('./queue');
-let message = require ('./message');
-let routing = require ('./routing');
-let steprecursively = require ('./step');
-let fc = require ('./find_connection');
-let fcim = require ('./find_connection_in__me');
-
 function send (etag, v, who, tracer) {
-    let m = new message.OutputMessage (etag, v, who, "?", tracer); // Send knows who the sender is, but doesn't yet know who the receiver is
+    let m = new OutputMessage (etag, v, who, "?", tracer); // Send knows who the sender is, but doesn't yet know who the receiver is
     this.outputQueue.enqueue (m);
 }
 
 function inject (etag, v, tracer) {
-    let m = new message.InputMessageNoTrace (etag, v, ".", undefined);
+    let m = new InputMessageNoTrace (etag, v, ".", undefined);
     this.inputQueue.enqueue (m);
 }
 
@@ -20,8 +13,8 @@ function Runnable (signature, protoImplementation, container, name) {
     this.signature = signature;
     this.protoImplementation = protoImplementation;
     this.container = container;
-    this.inputQueue = new queue.Queue ();
-    this.outputQueue = new queue.Queue ();
+    this.inputQueue = new Queue ();
+    this.outputQueue = new Queue ();
     this.send = send;
     this.inject = inject;
     this.handler = protoImplementation.handler;
@@ -31,7 +24,7 @@ function Runnable (signature, protoImplementation, container, name) {
     this.enqueueInput = function (m) { m.target = this.name; this.inputQueue.enqueue (m); };
     this.enqueueOutput = function (m) { m.target = this.name; this.outputQueue.enqueue (m); };
     this.resetOutputQueue = function () {
-        this.outputQueue = new queue.Queue ();
+        this.outputQueue = new Queue ();
     }
     this.errorUnhandledMessage = function (message) {
 	console.error (`unhandled message in ${this.name} ${message.tag}`);
@@ -118,9 +111,6 @@ function Container (signature, protoImplementation, container, name) {
     return me;
 }
 
-
-exports.Leaf = Leaf;
-exports.Container = Container;
 
 
 

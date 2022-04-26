@@ -1,5 +1,3 @@
-const runnable = require('./runnable');
-
 function handler_HTMLbutton (me, message) {
     me.send ("click", true);
     me.container.wakeup ();
@@ -22,7 +20,7 @@ let HTMLbutton_protoImplementation = {
 };
 
 function HTMLbutton (container) {
-    let me = new runnable.Leaf (HTMLbutton_signature, HTMLbutton_protoImplementation, container);
+    let me = new Leaf (HTMLbutton_signature, HTMLbutton_protoImplementation, container);
     return me;
 }
 

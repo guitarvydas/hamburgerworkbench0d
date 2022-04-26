@@ -15,5 +15,4 @@ var v = q.dequeue ();
 console.log (v);
 console.log (q.empty ()); */
 
-exports.Queue = Queue;
 

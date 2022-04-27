@@ -20,8 +20,8 @@ let PhraseFaker_protoImplementation = {
     finish: function () {}
 };
 
-function PhraseFaker (container) {
-    let me = new Leaf (signature, PhraseFaker_protoImplementation, container);
+function PhraseFaker (container, instancename) {
+    let me = new Leaf (signature, PhraseFaker_protoImplementation, container, instancename);
     return me;
 }
     

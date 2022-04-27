@@ -37,11 +37,17 @@
     <script>
       
       var testBench = new TestBench (null);
-      var htmlbutton = new HTMLbutton (testBench);
-      var phraseFaker = new PhraseFaker (testBench);
-      var phraseParser = new PhraseParser (testBench);
-      var orderTaker = new OrderTaker (testBench);
+      var htmlbutton = new HTMLbutton (testBench, "button");
+      var phraseFaker = new PhraseFaker (testBench, "faker");
+      var phraseParser = new PhraseParser (testBench, "parser");
+      var orderTaker = new OrderTaker (testBench, "order taker");
 
+      console.log (htmlbutton);
+      console.log (phraseFaker);
+      console.log (phraseParser);
+      console.log (orderTaker);
+      console.log (testBench);
+      
     </script>
 
     <br>

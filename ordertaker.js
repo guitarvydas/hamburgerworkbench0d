@@ -47,8 +47,8 @@ function ot_makeConnections (me) {
     ];
 }
 
-function OrderTaker (container) {
-    let me = new Container (signature, OrderTaker_protoImplementation, container);
+function OrderTaker (container, instancename) {
+    let me = new Container (OrderTaker_signature, OrderTaker_protoImplementation, container, instancename);
     me.children = ot_makeChildren (me);
     me.nets = ot_makeNets (me);
     me.connections = ot_makeConnections (me);

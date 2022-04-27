@@ -19,8 +19,8 @@ let HTMLbutton_protoImplementation = {
     finish: function () {}
 };
 
-function HTMLbutton (container) {
-    let me = new Leaf (HTMLbutton_signature, HTMLbutton_protoImplementation, container);
+function HTMLbutton (container, instancename) {
+    let me = new Leaf (HTMLbutton_signature, HTMLbutton_protoImplementation, container, instancename);
     return me;
 }
 

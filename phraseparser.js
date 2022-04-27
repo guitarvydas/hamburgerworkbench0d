@@ -128,8 +128,8 @@ let PhraseParser_protoImplementation = {
     finish: function () {}
 };
 
-function PhraseParser (container) {
-    let me = new Leaf (signature, PhraseParser_protoImplementation, container);
+function PhraseParser (container, instancename) {
+    let me = new Leaf (signature, PhraseParser_protoImplementation, container, instancename);
     return me;
 }
 

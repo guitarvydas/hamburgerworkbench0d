@@ -8,8 +8,12 @@ function inject (etag, v, tracer) {
     this.inputQueue.enqueue (m);
 }
 
-function Runnable (signature, protoImplementation, container, name) {
-    this.name = name;
+function Runnable (signature, protoImplementation, container, instancename) {
+    if (instancename) {
+	this.name = instancename;
+    } else {
+	this.name = signature.name;
+    }
     this.signature = signature;
     this.protoImplementation = protoImplementation;
     this.container = container;
@@ -39,8 +43,8 @@ function Runnable (signature, protoImplementation, container, name) {
     this.panic = function () { throw "panic"; }
 }
 
-function Leaf (signature, protoImplementation, container, name) {
-    let me = new Runnable (signature, protoImplementation, container, name);
+function Leaf (signature, protoImplementation, container, instancename) {
+    let me = new Runnable (signature, protoImplementation, container, instancename);
     me.route = function () { };
     me.children = [];
     me.connections = [];
@@ -63,8 +67,8 @@ function Leaf (signature, protoImplementation, container, name) {
     return me;
 }
 
-function Container (signature, protoImplementation, container, name) {
-    let me = new Runnable (signature, protoImplementation, container, name);
+function Container (signature, protoImplementation, container, instancename) {
+    let me = new Runnable (signature, protoImplementation, container, instancename);
     me.route = route;
     me.step = function () {
         // Container tries to step all children,
@@ -78,7 +82,7 @@ function Container (signature, protoImplementation, container, name) {
         } else {
             return false;
         }
-    },
+    };
     me.run_self = function () {
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
@@ -89,7 +93,7 @@ function Container (signature, protoImplementation, container, name) {
 	    this.activated = this.child_wasActivated (); 
 	    return this.activated;
 	}
-    },
+    };
     me.step_each_child = function () {
         this.children.forEach (childobject => {
             childobject.runnable.step ();

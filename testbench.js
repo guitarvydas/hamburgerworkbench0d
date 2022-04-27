@@ -22,7 +22,7 @@ var protoImplementation = {
 }       
 
     
-function makeChildren (me) {
+function tb_makeChildren (me) {
     var child1 = new HTMLbutton(me);
     var child2 = new PhraseFaker(me);
     var child3 = new OrderTaker(me);
@@ -33,7 +33,7 @@ function makeChildren (me) {
     ];
 }
 
-function makeNets (me) {
+function tb_makeNets (me) {
     return [
         {"name":"⇒₁","locks":["phrase faker"]},
         {"name":"⇒₂","locks":["order taker"]},
@@ -43,7 +43,7 @@ function makeNets (me) {
 }
 
 
-function makeConnections (me) {
+function tb_makeConnections (me) {
     return [
         {"sender":{"name":"html button","etag":"click"},
          "net":"⇒₁",
@@ -66,10 +66,10 @@ function makeConnections (me) {
 
 function TestBench () {
     let tb = new Container (signature, protoImplementation, null);
-    tb.children = makeChildren (tb);
-    tb.nets = makeNets (tb);
-    tb.connections = makeConnections (tb);
-    tb.deliver_input_from_container_input_to_child_input = deliver.deliver_input_from_container_input_to_child_input;
-    tb.deliver_input_from_container_input_to_me_output = deliver.deliver_input_from_container_input_to_me_output;
+    tb.children = tb_makeChildren (tb);
+    tb.nets = tb_makeNets (tb);
+    tb.connections = tb_makeConnections (tb);
+    tb.deliver_input_from_container_input_to_child_input = deliver_input_from_container_input_to_child_input;
+    tb.deliver_input_from_container_input_to_me_output = deliver_input_from_container_input_to_me_output;
     return tb;
 }

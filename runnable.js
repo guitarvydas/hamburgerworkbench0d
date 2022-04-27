@@ -108,6 +108,7 @@ function Container (signature, protoImplementation, container, instancename) {
         });
     };
     me.self_wasActivated = function () { return this.activated; };
+    me.wasActivated = me.self_wasActivated;
     me.find_connection = find_connection;
     me.find_connection_in__me = function (_me, child, etag) {
 	return find_connection_in__me (this, child.name, etag);
@@ -152,6 +153,7 @@ function Container (signature, protoImplementation, container, instancename) {
 		this.route ();
 	    }
 	}
+	console.log ('done');
     }
     return me;
 }

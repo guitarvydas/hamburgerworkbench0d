@@ -49,9 +49,9 @@ function ot_makeConnections (me) {
 
 function OrderTaker (container) {
     let me = new Container (signature, OrderTaker_protoImplementation, container);
-    me.children = ot_makeChildren (container);
-    me.nets = ot_makeNets (container);
-    me.connections = ot_makeConnections (container);
+    me.children = ot_makeChildren (me);
+    me.nets = ot_makeNets (me);
+    me.connections = ot_makeConnections (me);
     me.deliver_input_from_container_input_to_child_input = deliver_input_from_container_input_to_child_input;
     me.deliver_input_from_container_input_to_me_output = deliver_input_from_container_input_to_me_output;
     return me;

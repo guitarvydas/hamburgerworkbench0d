@@ -4,7 +4,7 @@ function send (etag, v, who, tracer) {
 }
 
 function inject (etag, v, tracer) {
-    let m = new InputMessageNoTrace (etag, v, ".", undefined);
+    let m = new InputMessage (etag, v, ".", undefined);
     this.inputQueue.enqueue (m);
 }
 
@@ -23,6 +23,9 @@ function Runnable (signature, protoImplementation, container, name) {
     this.dequeueOutput = function () {return this.outputQueue.dequeue ();};
     this.enqueueInput = function (m) { m.target = this.name; this.inputQueue.enqueue (m); };
     this.enqueueOutput = function (m) { m.target = this.name; this.outputQueue.enqueue (m); };
+    this.activated = false;
+    this.begin = function () {};
+    this.finish = function () {};
     this.resetOutputQueue = function () {
         this.outputQueue = new Queue ();
     }
@@ -30,12 +33,14 @@ function Runnable (signature, protoImplementation, container, name) {
 	console.error (`unhandled message in ${this.name} ${message.tag}`);
 	process.exit (1);
     };
+    if (container) {
+	this.conclude = container.conclude;
+    }
     this.panic = function () { throw "panic"; }
 }
 
 function Leaf (signature, protoImplementation, container, name) {
     let me = new Runnable (signature, protoImplementation, container, name);
-    me.conclude = container.conclude;
     me.route = function () { };
     me.children = [];
     me.connections = [];
@@ -44,32 +49,30 @@ function Leaf (signature, protoImplementation, container, name) {
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
-            return this.hasOutputs ();
+	    this.activated = true;
+            return this.activated
         } else {
-            return false;
+	    this.activated = false;
+            return this.activated
         }
     }
-    this.wakeup = function () { throw "internal error: Leaf received wakeup (this should never happen)"};
+    me.wasActivated = function () {
+	return this.activated;
+    }
+    me.wakeup = function () { throw "internal error: Leaf received wakeup (this should never happen)"};
     return me;
 }
 
 function Container (signature, protoImplementation, container, name) {
     let me = new Runnable (signature, protoImplementation, container, name);
-    if (container) {
-	me.conclude = container.conclude;
-    } else {
-	me._done = false;
-	me.conclude = function () { 
-            me.container._done = true; 
-	};
-	me.done = function () {return me._done;};
-    }
     me.route = route;
     me.step = function () {
         // Container tries to step all children,
         // if no child was busy, then Container looks at its own input
-        var workFunction = steprecursively.Try_component ();
-        var workPerformed = workFunction (this);
+	// (logic written in step.drawio -> step.drakon -> step.js ; step returns
+	//  a stepper function, which must be called with this)
+        var stepperFunction = Try_component ();
+        var workPerformed = stepperFunction (this);
         if (! workPerformed) {
 	    return this.run_self ();
         } else {
@@ -80,9 +83,11 @@ function Container (signature, protoImplementation, container, name) {
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
-            return this.hasOutputs ();
+	    this.activated = true;
+            return this.activated;
 	} else {
-	    return false;
+	    this.activated = this.child_wasActivated (); 
+	    return this.activated;
 	}
     },
     me.step_each_child = function () {
@@ -90,12 +95,15 @@ function Container (signature, protoImplementation, container, name) {
             childobject.runnable.step ();
         });
     };
-    me.child_produced_output = function () {
+    me.child_wasActivated = function () {
         return this.children.some (childobject => {
-            return childobject.runnable.hasOutputs ();
+	    var c = childobject;
+	    var cr = childobject.runnable;
+            var r = cr.wasActivated (); // to appease debugger
+	    return r;
         });
     };
-    me.self_produced_output = function () { return (me.hasOutputs ()); };
+    me.self_wasActivated = function () { return this.activated; };
     me.find_connection = find_connection;
     me.find_connection_in__me = function (_me, child, etag) {
 	return find_connection_in__me (this, child.name, etag);
@@ -113,19 +121,35 @@ function Container (signature, protoImplementation, container, name) {
 	};
 	return _ret;
     }
-    me.handler = deliverInputMessageToAllChildrenOfSelf,
-    me.route = route,
-    me.begin = function () {};
-    me.finish = function () {};
+    if (protoImplementation.begin) {
+	me.begin = protoImplementation.begin;
+    }
+    if (protoImplementation.finish) {
+        me.finish = protoImplementation.finish;
+    }
+
+    me._done = false;
+    me.conclude = function () { 
+        this.container._done = true; 
+    };
+    me.done = function () {return this._done;};
+    me.resetdone = function () {this._done = false;}
     me.wakeup = function () {
 	if (this.container) {
 	    this.route ();
 	    this.container.wakeup (); // keep punting upwards until at top
 	} else {
-	    ???
+	    this.resetdone ();
+	    this.step ();
+	    this.route ();
+	    while (this.activated && (!this.done ())) {
+		this.resetdone ();
+		this.step ();
+		this.route ();
+	    }
+	}
+    }
     return me;
 }
-
-
 
 

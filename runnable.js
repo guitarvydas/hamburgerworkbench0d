@@ -49,6 +49,7 @@ function Leaf (signature, protoImplementation, container, name) {
             return false;
         }
     }
+    this.wakeup = function () { throw "internal error: Leaf received wakeup (this should never happen)"};
     return me;
 }
 
@@ -112,10 +113,16 @@ function Container (signature, protoImplementation, container, name) {
 	};
 	return _ret;
     }
-    handler = deliverInputMessageToAllChildrenOfSelf,
-    route = route,
-    begin = function () {};
-    finish = function () {};
+    me.handler = deliverInputMessageToAllChildrenOfSelf,
+    me.route = route,
+    me.begin = function () {};
+    me.finish = function () {};
+    me.wakeup = function () {
+	if (this.container) {
+	    this.route ();
+	    this.container.wakeup (); // keep punting upwards until at top
+	} else {
+	    ???
     return me;
 }
 

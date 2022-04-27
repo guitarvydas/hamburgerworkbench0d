@@ -9,11 +9,11 @@ function Try_component () {
 		} else {
 
 		    _me.step_each_child ();
-		    if (!_me.child_produced_output ()) {
+		    if (!_me.child_wasActivated ()) {
 			return lambdas.try_self (_me, 2);
 		    } else {
 
-			return lambdas.produced_output (_me, 0);
+			return lambdas.activated (_me, 0);
 
 			;}
 
@@ -32,11 +32,11 @@ function Try_component () {
 		return lambdas.try_self (_me, 2);
 	    } else if (_label === 2) {
 		_me.run_self ();
-		if (!_me.self_produced_output ()) {
-		    return lambdas.no_output (_me, 3);
+		if (!_me.self_wasActivated ()) {
+		    return lambdas.not_activated (_me, 3);
 		} else {
 
-		    return lambdas.produced_output (_me, 0);
+		    return lambdas.activated (_me, 0);
 
 		    ;}
 
@@ -46,9 +46,9 @@ function Try_component () {
 		_me.panic ("try_self", _label); 
 	    }
 	},
-	no_output: function (_me, _label) {
+	not_activated: function (_me, _label) {
 	    if (_label === 0) {
-		return lambdas.no_output (_me, 3);
+		return lambdas.not_activated (_me, 3);
 	    } else if (_label === 3) {
 		_ret = false;
 		return lambdas.finished (_me, 0);
@@ -56,17 +56,17 @@ function Try_component () {
 
 
 	    } else {
-		_me.panic ("no_output", _label); 
+		_me.panic ("not_activated", _label); 
 	    }
 	},
-	produced_output: function (_me, _label) {
+	activated: function (_me, _label) {
 	    if (_label === 0) {
 		_ret = true;
 		return lambdas.finished (_me, 0);
 
 
 	    } else {
-		_me.panic ("produced_output", _label); 
+		_me.panic ("activated", _label); 
 	    }
 	},
 	finished: function (_me, _label) {

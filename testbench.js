@@ -29,7 +29,7 @@ function tb_makeChildren (me) {
     return [
         {name: "html button", runnable: child1},
         {name: "phrase faker", runnable: child2},
-        {name: "phrase parser", runnable: child3}
+        {name: "order taker", runnable: child3}
     ];
 }
 

@@ -1,5 +1,5 @@
-function send (etag, v, who, tracer) {
-    let m = new OutputMessage (etag, v, who, "?", tracer); // Send knows who the sender is, but doesn't yet know who the receiver is
+function send (etag, v, tracer) {
+    let m = new OutputMessage (etag, v, this.name, "?", tracer); // Send knows who the sender is, but doesn't yet know who the receiver is
     this.outputQueue.enqueue (m);
 }
 
@@ -11,9 +11,9 @@ function inject (etag, v, tracer) {
 
 function Runnable (signature, protoImplementation, container, instancename) {
     if (instancename) {
-	this.name = instancename;
+        this.name = instancename;
     } else {
-	this.name = signature.name;
+        this.name = signature.name;
     }
     this.signature = signature;
     this.protoImplementation = protoImplementation;
@@ -36,12 +36,12 @@ function Runnable (signature, protoImplementation, container, instancename) {
         this.outputQueue = new Queue ();
     }
     this.errorUnhandledMessage = function (message) {
-	console.error (`unhandled message in ${this.name} ${message.tag}`);
-	//process.exit (1);
-	throw 'error exit';
+        console.error (`unhandled message in ${this.name} ${message.tag}`);
+        //process.exit (1);
+        throw 'error exit';
     };
     if (container) {
-	this.conclude = container.conclude;
+        this.conclude = container.conclude;
     }
     this.memoPreviousReadiness = function () { this._previouslyReady = this.hasInputs (); };
     this.testPreviousReadiness = function () { return this._previouslyReady; };
@@ -69,8 +69,8 @@ function Container (signature, protoImplementation, container, instancename) {
     me.step = function () {
         // Container tries to step all children,
         // if no child was busy, then Container looks at its own input
-	// (logic written in step.drawio -> step.drakon -> step.js ; step returns
-	//  a stepper function, which must be called with this)
+        // (logic written in step.drawio -> step.drakon -> step.js ; step returns
+        //  a stepper function, which must be called with this)
         var stepperFunction = Try_component ();
         stepperFunction (this);
     },
@@ -78,7 +78,7 @@ function Container (signature, protoImplementation, container, instancename) {
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
-	}
+        }
     },
     me.memo_readiness_of_each_child = function () {
         this.children.forEach (childobject => {
@@ -106,29 +106,29 @@ function Container (signature, protoImplementation, container, instancename) {
     me.ready = me.hasInputs;
     me.busy = me.any_child_has_inputs;
     me.hasWorkToDo = function () {
-	return (this.ready () || this.busy () );
+        return (this.ready () || this.busy () );
     };
 
     me.find_connection = find_connection;
     me.find_connection_in__me = function (_me, child, etag) {
-	return find_connection_in__me (this, child.name, etag);
+        return find_connection_in__me (this, child.name, etag);
     };
     me.lookupChild = function (name) {
-	var _ret = null;
-	this.children.forEach (childobj => {
-	    if (childobj.name === name) {
-		_ret = childobj.runnable;
-	    }
-	});
-	if (_ret === null) {
-	    console.error (`child '${name}' not found in '${this.name}'`);
-	    //process.exit (1);
-	    throw 'error exit';
-	};
-	return _ret;
+        var _ret = null;
+        this.children.forEach (childobj => {
+            if (childobj.name === name) {
+                _ret = childobj.runnable;
+            }
+        });
+        if (_ret === null) {
+            console.error (`child '${name}' not found in '${this.name}'`);
+            //process.exit (1);
+            throw 'error exit';
+        };
+        return _ret;
     }
     if (protoImplementation.begin) {
-	    me.begin = protoImplementation.begin;
+            me.begin = protoImplementation.begin;
     }
     if (protoImplementation.finish) {
         me.finish = protoImplementation.finish;
@@ -140,17 +140,17 @@ function Container (signature, protoImplementation, container, instancename) {
     me.done = function () {return this._done;};
     me.resetdone = function () {this._done = false;}
     me.wakeup = function () {
-	if (this.container) {
-	    this.route ();
-	    this.container.wakeup (); // keep punting upwards until at top
-	} else {
-	    this.resetdone ();
-	    this.route ();
-	    while ( (!this.done ()) && this.hasWorkToDo () ) {
-		this.step ();
-		this.route ();
-	    }
-	}
+        if (this.container) {
+            this.route ();
+            this.container.wakeup (); // keep punting upwards until at top
+        } else {
+            this.resetdone ();
+            this.route ();
+            while ( (!this.done ()) && this.hasWorkToDo () ) {
+                this.step ();
+                this.route ();
+            }
+        }
     }
 
     return me;

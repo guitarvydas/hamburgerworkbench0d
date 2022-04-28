@@ -37,7 +37,8 @@ function Runnable (signature, protoImplementation, container, instancename) {
     }
     this.errorUnhandledMessage = function (message) {
 	console.error (`unhandled message in ${this.name} ${message.tag}`);
-	process.exit (1);
+	//process.exit (1);
+	throw 'error exit';
     };
     if (container) {
 	this.conclude = container.conclude;
@@ -62,8 +63,8 @@ function Leaf (signature, protoImplementation, container, name) {
     return me;
 }
 
-function Container (signature, protoImplementation, container, name) {
-    let me = new Runnable (signature, protoImplementation, container, name);
+function Container (signature, protoImplementation, container, instancename) {
+    let me = new Runnable (signature, protoImplementation, container, instancename);
     me.route = route;
     me.step = function () {
         // Container tries to step all children,
@@ -120,8 +121,9 @@ function Container (signature, protoImplementation, container, name) {
 	    }
 	});
 	if (_ret === null) {
-	    console.error (`child ${name} not found in ${this.name}`);
-	    process.exit (1);
+	    console.error (`child '${name}' not found in '${this.name}'`);
+	    //process.exit (1);
+	    throw 'error exit';
 	};
 	return _ret;
     }

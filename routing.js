@@ -3,7 +3,6 @@ function route () {
     var _ret = null;
 
     _me.children.forEach (child => {
-	console.log (child.hasOutputs ());
         child.runnable.outputQueue.forEach (output_message => {
             var message = output_message;
             var connection = this.find_connection_in__me (this, child, message.etag);

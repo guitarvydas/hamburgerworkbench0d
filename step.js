@@ -1,5 +1,5 @@
 
-function Try_component () {
+Try_component = function () {
     var _ret = undefined;
     var lambdas = {
 	main: function (_me, _label) {
@@ -8,14 +8,16 @@ function Try_component () {
 		    return lambdas.try_self (_me, 1);
 		} else {
 
+		    _me.memo_readiness_of_each_child ();
 		    _me.step_each_child ();
-		    if (!_me.child_wasActivated ()) {
+		    if (!_me.any_child_was_previously_ready ()) {
 			return lambdas.try_self (_me, 2);
 		    } else {
 
 			return lambdas.activated (_me, 0);
 
 			;}
+
 
 
 		    ;}
@@ -31,15 +33,15 @@ function Try_component () {
 
 		return lambdas.try_self (_me, 2);
 	    } else if (_label === 2) {
-		_me.run_self ();
-		if (!_me.self_wasActivated ()) {
+		if (!_me.self_has_input ()) {
 		    return lambdas.not_activated (_me, 3);
 		} else {
 
+		    _me.self_first_step_with_input ();
 		    return lambdas.activated (_me, 0);
 
-		    ;}
 
+		    ;}
 
 
 	    } else {
@@ -50,9 +52,7 @@ function Try_component () {
 	    if (_label === 0) {
 		return lambdas.not_activated (_me, 3);
 	    } else if (_label === 3) {
-		_ret = false;
 		return lambdas.finished (_me, 0);
-
 
 
 	    } else {
@@ -61,9 +61,7 @@ function Try_component () {
 	},
 	activated: function (_me, _label) {
 	    if (_label === 0) {
-		_ret = true;
 		return lambdas.finished (_me, 0);
-
 
 	    } else {
 		_me.panic ("activated", _label); 
@@ -79,12 +77,6 @@ function Try_component () {
 	},
 	_endoflambdas: null
     };
-    return (function (_me) { 
-	if (_me) {
-	    return lambdas.main (_me, 0);
-	} else {
-	    throw (`step: _me is undefined`);
-	}
-    });
+    return (function (_me) { return lambdas.main (_me, 0); });
 }
 

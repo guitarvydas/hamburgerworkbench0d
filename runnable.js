@@ -59,7 +59,7 @@ function Leaf (signature, protoImplementation, container, name) {
             this.handler (this, m);
         }
     };
-    this._previouslyReady = false;
+    me._previouslyReady = false;
     return me;
 }
 
@@ -75,7 +75,9 @@ function Container (signature, protoImplementation, container, instancename) {
         stepperFunction (this);
     },
     me.self_first_step_with_input = function () {
+	console.log (`first_step_with_input 0 ${this.name}`);
         if (! this.inputQueue.empty ()) {
+	    console.log (`first_step_with_input 1 ${this.name}`);
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
         }
@@ -91,9 +93,12 @@ function Container (signature, protoImplementation, container, instancename) {
         });
     };
     me.step_each_child = function () {
+	console.log (`step-each-child ${this.name} ...`);
         this.children.forEach (childobject => {
+	    console.log (`... ${this.name} steps ${childobject.runnable.name}`);
             childobject.runnable.step ();
         });
+	console.log (`... end step-each-child ${this.name}`);
     };
 
     me.any_child_has_inputs = function () {

@@ -13,7 +13,7 @@ var OrderTaker_protoImplementation = {
     kind: "container",
 }       
 
-    
+
 function ot_makeChildren (me) {
     var child1 = new PhraseParser(me, "ot phrase parser");
     return [
@@ -54,6 +54,9 @@ function OrderTaker (container, instancename) {
     me.connections = ot_makeConnections (me);
     me.deliver_input_from_container_input_to_child_input = deliver_input_from_container_input_to_child_input;
     me.deliver_input_from_container_input_to_me_output = deliver_input_from_container_input_to_me_output;
-    me.handler = deliverInputMessageToAllChildrenOfSelf;
+    me.handler = function (me, message) {
+        console.log (`handler ${this.name}`);
+        deliverInputMessageToAllChildrenOfSelf (me, message);
+    }
     return me;
 }

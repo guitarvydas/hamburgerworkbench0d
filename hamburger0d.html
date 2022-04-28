@@ -42,16 +42,22 @@
       var phraseParser = new PhraseParser (testBench, "parser");
       var orderTaker = new OrderTaker (testBench, "order taker");
 
-      console.log (htmlbutton);
-      console.log (phraseFaker);
-      console.log (phraseParser);
-      console.log (orderTaker);
-      console.log (testBench);
-      
+      function buttonhandler () {
+	  console.log (`button handler 1`);
+          htmlbutton.handler (htmlbutton, null);
+	  console.log (`button handler 2`);
+          htmlbutton.container.wakeup ();
+	  console.log (`button handler 3`);
+          let outs = testBench.outputs ();
+	  console.log (`button handler 4`);
+          document.getElementById ('output').innerHTML = outs.toString ();
+	  console.log (`button handler 5`);
+      }
+
     </script>
 
     <br>
-    <button onclick="htmlbutton.handler (htmlbutton, null)">Hamburger</button>
+    <button onclick="buttonhandler ()">Hamburger</button>
 
   </body>
 </html>

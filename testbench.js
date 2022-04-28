@@ -23,9 +23,9 @@ var protoImplementation = {
 
     
 function tb_makeChildren (me) {
-    var child1 = new HTMLbutton(me);
-    var child2 = new PhraseFaker(me);
-    var child3 = new OrderTaker(me);
+    var child1 = new HTMLbutton(me, "html button");
+    var child2 = new PhraseFaker(me, "phrase faker");
+    var child3 = new OrderTaker(me,  "order taker");
     return [
         {name: "html button", runnable: child1},
         {name: "phrase faker", runnable: child2},

@@ -15,7 +15,7 @@ var OrderTaker_protoImplementation = {
 
     
 function ot_makeChildren (me) {
-    var child1 = new PhraseParser(me);
+    var child1 = new PhraseParser(me, "ot phrase parser");
     return [
         {"name": "phrase parser", "runnable": child1}
     ];

@@ -79,6 +79,12 @@ function Try_component () {
 	},
 	_endoflambdas: null
     };
-    return (function (_me) { lambdas.main (_me, 0); });
+    return (function (_me) { 
+	if (_me) {
+	    return lambdas.main (_me, 0);
+	} else {
+	    throw (`step: _me is undefined`);
+	}
+    });
 }
 

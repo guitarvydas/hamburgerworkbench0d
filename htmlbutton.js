@@ -1,6 +1,5 @@
 function handler_HTMLbutton (me, message) {
     me.send ("click", true);
-    me.container.wakeup ();
 }
 
 var HTMLbutton_signature = {

@@ -19,10 +19,12 @@ function Runnable (signature, protoImplementation, container, instancename) {
     this.container = container;
     this.inputQueue = new Queue ();
     this.outputQueue = new Queue ();
+    this.outputs = function () { return this.outputQueue.toArray (); };
     this.send = send;
     this.inject = inject;
     this.handler = protoImplementation.handler;
     this.hasOutputs = function () {return !this.outputQueue.empty ()};
+    this.hasInputs = function () {return !this.inputQueue.empty ()};
     this.has_children = function () {return (0 < this.children.length); };
     this.dequeueOutput = function () {return this.outputQueue.dequeue ();};
     this.enqueueInput = function (m) { m.target = this.name; this.inputQueue.enqueue (m); };
@@ -49,14 +51,17 @@ function Leaf (signature, protoImplementation, container, instancename) {
     me.children = [];
     me.connections = [];
     me.step = function () {
+	console.log(`step begin ${this.name}`);
         // Leaf has no children, so it always looks at it own input
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
 	    this.activated = true;
+	    console.log(`step ${this.name} activated ${this.activated}`);
             return this.activated
         } else {
 	    this.activated = false;
+	    console.log(`step ${this.name} activated ${this.activated}`);
             return this.activated
         }
     }
@@ -71,19 +76,25 @@ function Container (signature, protoImplementation, container, instancename) {
     let me = new Runnable (signature, protoImplementation, container, instancename);
     me.route = route;
     me.step = function () {
+	console.log(`step begin ${this.name}`);
         // Container tries to step all children,
         // if no child was busy, then Container looks at its own input
 	// (logic written in step.drawio -> step.drakon -> step.js ; step returns
 	//  a stepper function, which must be called with this)
         var stepperFunction = Try_component ();
-        var workPerformed = stepperFunction (this);
-        if (! workPerformed) {
-	    return this.run_self ();
-        } else {
+        this.activated = stepperFunction (this);
+	console.log(`stepped ${this.name} activated ${this.activated}`);
+        if (this.activated === true) {
+	    this.activated = this.run_self ();
+	    return this.activated;
+        } else if (this.activated === false) {
             return false;
-        }
+        } else {
+	    throw 'internal error Container.step is undefined';
+	}
     };
     me.run_self = function () {
+	console.log(`run_self begin ${this.name}`);
         if (! this.inputQueue.empty ()) {
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
@@ -95,20 +106,43 @@ function Container (signature, protoImplementation, container, instancename) {
 	}
     };
     me.step_each_child = function () {
+	console.log(`step_each_child begin ${this.name}`);
         this.children.forEach (childobject => {
+	    console.log(`step_each_child ${this.name} tries ${childobject.runnable.name}`);
             childobject.runnable.step ();
         });
+	console.log(`step_each_child finish ${this.name}`);
     };
     me.child_wasActivated = function () {
-        return this.children.some (childobject => {
+        var a = this.children.some (childobject => {
 	    var c = childobject;
 	    var cr = childobject.runnable;
             var r = cr.wasActivated (); // to appease debugger
+	    console.log (`child ${cr.name} activated  ${r}`);
 	    return r;
         });
+	console.log(`child_was_activated ${this.name} ${a}`);
+	return a;
     };
-    me.self_wasActivated = function () { return this.activated; };
-    me.wasActivated = me.self_wasActivated;
+
+    me.anyChildHasInput = function () {
+	var i = this.children.some (childobject => {
+	    var r = childobject.runnable.hasInputs ();
+	    return r;
+	});
+	return i;
+    };
+    
+    me.wasActivated = function () {
+	var a = this.activated  ||
+	    this.anyChildHasInput () ||
+	    this.child_wasActivated ();
+	this.activated = a;
+	return  a;
+    };
+    
+    me.self_wasActivated = me.wasActivated;
+
     me.find_connection = find_connection;
     me.find_connection_in__me = function (_me, child, etag) {
 	return find_connection_in__me (this, child.name, etag);
@@ -140,18 +174,28 @@ function Container (signature, protoImplementation, container, instancename) {
     me.done = function () {return this._done;};
     me.resetdone = function () {this._done = false;}
     me.wakeup = function () {
+	  console.log (`wake up begin ${this.name}`);
 	if (this.container) {
 	    this.route ();
 	    this.container.wakeup (); // keep punting upwards until at top
 	} else {
+	  console.log (`wake up 1 ${this.name}`);
 	    this.resetdone ();
-	    this.step ();
+	  console.log (`wake up 2 ${this.name}`);
+	    // this.step ();
+	  console.log (`wake up 3 ${this.name}`);
 	    this.route ();
-	    while (this.activated && (!this.done ())) {
+	  console.log (`wake up 4 ${this.name} wasActivated ${this.wasActivated ()}`);
+	    while (this.wasActivated  () && (!this.done ())) {
+	  console.log (`wake up 5 ${this.name}`);
 		this.resetdone ();
+	  console.log (`wake up 6 ${this.name}`);
 		this.step ();
+	  console.log (`wake up 7 ${this.name}`);
 		this.route ();
+	  console.log (`wake up 8 ${this.name}`);
 	    }
+	  console.log (`wake up 9 ${this.name}`);
 	}
 	console.log ('done');
     }

@@ -2,7 +2,6 @@ function route () {
     var _me = this;
     var _ret = null;
 
-    console.log(`route begin ${this.name}`);
     _me.children.forEach (child => {
 	child.runnable.outputQueue.forEach (output_message => {
 	    var message = output_message;

@@ -43,15 +43,10 @@
       var orderTaker = new OrderTaker (testBench, "order taker");
 
       function buttonhandler () {
-	  console.log (`button handler 1`);
           htmlbutton.handler (htmlbutton, null);
-	  console.log (`button handler 2`);
           htmlbutton.container.wakeup ();
-	  console.log (`button handler 3`);
           let outs = testBench.outputs ();
-	  console.log (`button handler 4`);
-          document.getElementById ('output').innerHTML = outs.toString ();
-	  console.log (`button handler 5`);
+          document.getElementById ('output').innerHTML = outs.toString () + '\ndone';
       }
 
     </script>

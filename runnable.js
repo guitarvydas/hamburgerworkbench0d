@@ -80,10 +80,7 @@ function Container (signature, protoImplementation, container, name) {
 	}
     },
     me.memo_readiness_of_each_child = function () {
-	console.log (this.children);
         this.children.forEach (childobject => {
-	    console.log (childobject.name);
-	    console.log (childobject);
             childobject.runnable.memoPreviousReadiness ();
         });
     };

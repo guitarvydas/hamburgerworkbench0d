@@ -86,7 +86,7 @@ function Container (signature, protoImplementation, container, name) {
     };
     me.any_child_was_previously_ready = function () {
         return this.children.some (childobject => {
-            childobject.runnable.testPreviousReadiness ();
+            return childobject.runnable.testPreviousReadiness ();
         });
     };
     me.step_each_child = function () {
@@ -97,7 +97,7 @@ function Container (signature, protoImplementation, container, name) {
 
     me.any_child_has_inputs = function () {
         return this.children.some (childobject => {
-            childobject.runnable.hasInputs ();
+            return childobject.runnable.hasInputs ();
         });
     }
     
@@ -143,7 +143,6 @@ function Container (signature, protoImplementation, container, name) {
 	    this.container.wakeup (); // keep punting upwards until at top
 	} else {
 	    this.resetdone ();
-	    this.step ();
 	    this.route ();
 	    while ( (!this.done ()) && this.hasWorkToDo () ) {
 		this.step ();

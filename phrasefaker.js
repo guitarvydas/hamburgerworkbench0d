@@ -1,4 +1,5 @@
 function handler_phraseFaker (me, message) {
+    console.log (`phrase faker ${message}`);
     // first-order testing - does the phraseFaker work at all?
     me.send ("short phrase", true);
 }

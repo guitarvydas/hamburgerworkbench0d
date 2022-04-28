@@ -37,13 +37,11 @@
     <script>
       
       var testBench = new TestBench (null);
-      var htmlbutton = new HTMLbutton (testBench, "button");
-      var phraseFaker = new PhraseFaker (testBench, "faker");
-      var phraseParser = new PhraseParser (testBench, "parser");
-      var orderTaker = new OrderTaker (testBench, "order taker");
+      var htmlbutton = testBench.lookupChild ("html button");
 
       function buttonhandler () {
           htmlbutton.handler (htmlbutton, null);
+	  console.log (htmlbutton.hasOutputs ());
           htmlbutton.container.wakeup ();
           let outs = testBench.outputs ();
           document.getElementById ('output').innerHTML = outs.toString () + '\ndone';

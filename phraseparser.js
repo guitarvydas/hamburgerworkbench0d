@@ -93,14 +93,14 @@ function transpileHamburgerOrder (phrase) {
         hookMap.addOperation ('hamburger', hamburger_hooks);
         let treeWalker = hookMap (cst);
         let order = treeWalker.hamburger ();
-        return order;
+        return order [0];
     } else {
         me.send ("hook error", true);
     }
 }
 function handler_phraseParser (me, message) {
     let order = transpileHamburgerOrder (message.data);
-    console.log (message);
+    console.log (order);
     if (order.short) {
         console.log ('short');
         me.send ("order no choices", order);

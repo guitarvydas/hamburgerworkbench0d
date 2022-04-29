@@ -25,7 +25,7 @@ function Runnable (signature, protoImplementation, container, instancename) {
     this.send = send;
     this.inject = inject;
     this.handler = function (me, message) {
-	protoImplementation.handler (me, message);
+        protoImplementation.handler (me, message);
     };
     this.hasOutputs = function () {return !this.outputQueue.empty ()};
     this.hasInputs = function () {return !this.inputQueue.empty ()};
@@ -48,6 +48,8 @@ function Runnable (signature, protoImplementation, container, instancename) {
     }
     this.memoPreviousReadiness = function () { this._previouslyReady = this.hasInputs (); };
     this.testPreviousReadiness = function () { return this._previouslyReady; };
+    this.ready = this.hasInputs;
+    this.busy = function () {return false};
     this.panic = function () { throw "panic"; }
 }
 
@@ -78,9 +80,9 @@ function Container (signature, protoImplementation, container, instancename) {
         stepperFunction (this);
     },
     me.self_first_step_with_input = function () {
-	console.log (`first_step_with_input 0 ${this.name}`);
+        console.log (`first_step_with_input 0 ${this.name}`);
         if (! this.inputQueue.empty ()) {
-	    console.log (`first_step_with_input 1 ${this.name}`);
+            console.log (`first_step_with_input 1 ${this.name}`);
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
         }
@@ -96,25 +98,26 @@ function Container (signature, protoImplementation, container, instancename) {
         });
     };
     me.step_each_child = function () {
-	console.log (`step-each-child ${this.name} ...`);
         this.children.forEach (childobject => {
-	    console.log (`... ${this.name} steps ${childobject.runnable.name}`);
             childobject.runnable.step ();
         });
-	console.log (`... end step-each-child ${this.name}`);
     };
 
-    me.any_child_has_inputs = function () {
+    me.any_child_is_busy = function () {
         return this.children.some (childobject => {
-            return childobject.runnable.hasInputs ();
+	    var ready = childobject.runnable.ready ();
+            var busy = childobject.runnable.busy ();
+            return (ready || busy);
         });
     }
     
     me.self_has_input = me.hasInputs;
     me.ready = me.hasInputs;
-    me.busy = me.any_child_has_inputs;
+    me.busy = me.any_child_is_busy;
     me.hasWorkToDo = function () {
-        return (this.ready () || this.busy () );
+        var ready = this.ready ();
+        var busy = this.busy ();
+        return (ready || busy);
     };
 
     me.find_connection = find_connection;

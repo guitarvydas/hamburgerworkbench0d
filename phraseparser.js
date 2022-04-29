@@ -25,8 +25,8 @@ function foldChoices (a) {
     let condiments = [];
     let extras = [];
     a.forEach (choiceObj => {
-	choiceObj.condiments [0] && condiments.push (choiceObj.condiments [0]);
-	choiceObj.extras [0] && extras.push (choiceObj.extras [0]);
+        choiceObj.condiments [0] && condiments.push (choiceObj.condiments [0]);
+        choiceObj.extras [0] && extras.push (choiceObj.extras [0]);
     });
     return {condiments: condiments, extras: extras};
 }
@@ -34,10 +34,10 @@ function foldChoices (a) {
 let hamburger_hooks = {
     Main: function (p) { return p.hamburger (); },
     Phrase_longphrase: function (sI, sWant, sA, sHamburger, sWith, choiceArray) {
-	
+        
         let c = foldChoices (choiceArray.hamburger ());
-	c.long = true;
-	return c;
+        c.long = true;
+        return c;
     },
     Phrase_shortphrase: function (sI, sWant, sA, sCheeseburger) {
         return { condiments: [], extras: [], short: true};
@@ -74,14 +74,14 @@ let hamburger_hooks = {
     }
 };
 
-function parse (phrase) {
+function parsePhrase (phrase) {
     let g = ohm.grammar (grammar);
     let matchResult = g.match (phrase);
     if (matchResult.succeeded ()) {
         let s = g.createSemantics ();
         return [matchResult, s];
     } else {
-	me.send ("parse error", true);
+        this.send ("parse error", true);
         let dontcare = null;
         return [ matchResult, dontcare ];
     }
@@ -93,22 +93,22 @@ function transpileHamburgerOrder (phrase) {
         hookMap.addOperation ('hamburger', hamburger_hooks);
         let treeWalker = hookMap (cst);
         let order = treeWalker.hamburger ();
-	return order;
+        return order;
     } else {
-	me.send ("hook error", true);
+        me.send ("hook error", true);
     }
 }
 function handler_phraseParser (me, message) {
     let order = transpileHamburgerOrder (message.data);
     console.log (message);
     if (order.short) {
-	console.log ('short');
-	me.send ("order no choices", order);
+        console.log ('short');
+        me.send ("order no choices", order);
     } else if (order.long) {
-	console.log ('long');
-	me.send ("order with choices", order);
+        console.log ('long');
+        me.send ("order with choices", order);
     } else {
-	throw "internal error: order does not contain short nor long attribute";
+        throw "internal error: order does not contain short nor long attribute";
     }
 }
 
@@ -116,10 +116,10 @@ var PhraseParser_signature = {
     name: "Phrase Parser",
     inputs: [{name: "phrase", structure: ["phrase"]}],
     outputs: [
-	{ name: "order no choices", structure: [] },
-	{ name: "order with choices", structure: ["condiments", "extras"] },
-	{ name: "parse error", structure: [] }, // NC for this simplified example
-	{ name: "hook error", structure: [] }   // NC for this simplified example
+        { name: "order no choices", structure: [] },
+        { name: "order with choices", structure: ["condiments", "extras"] },
+        { name: "parse error", structure: [] }, // NC for this simplified example
+        { name: "hook error", structure: [] }   // NC for this simplified example
     ]
 };
 

@@ -1,5 +1,6 @@
 function send (etag, v, tracer) {
     let m = new OutputMessage (etag, v, this.name, "?", tracer); // Send knows who the sender is, but doesn't yet know who the receiver is
+    console.log (`send ${m.toString ()}`);
     this.outputQueue.enqueue (m);
 }
 
@@ -23,7 +24,9 @@ function Runnable (signature, protoImplementation, container, instancename) {
     this.outputs = function () { return this.outputQueue.toArray (); };
     this.send = send;
     this.inject = inject;
-    this.handler = protoImplementation.handler;
+    this.handler = function (me, message) {
+	protoImplementation.handler (me, message);
+    };
     this.hasOutputs = function () {return !this.outputQueue.empty ()};
     this.hasInputs = function () {return !this.inputQueue.empty ()};
     this.has_children = function () {return (0 < this.children.length); };

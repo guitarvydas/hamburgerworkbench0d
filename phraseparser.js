@@ -37,10 +37,11 @@ let hamburger_hooks = {
         
         let c = foldChoices (choiceArray.hamburger ());
         c.long = true;
+	c.item = "hamburger";
         return c;
     },
     Phrase_shortphrase: function (sI, sWant, sA, sCheeseburger) {
-        return { condiments: [], extras: [], short: true};
+        return { item: "cheeseburger", condiments: [], extras: [], short: true};
     },
     Choice: function (optAnd, ch) {
         return ch.hamburger ();

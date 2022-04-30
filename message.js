@@ -20,7 +20,7 @@ function OutputMessage (etag, v, who, target, tracer) {
 
 function recursiveToString (m) {
     if (m) {
-        return `(${m.comefrom}->${m.target}::[${m.kind}]${m.etag}:${m.data}:${recursiveToString (m.tracer)})`;
+        return `(${m.comefrom}->${m.target}::[${m.kind}]${m.etag}:${m.data.toString ()}:${recursiveToString (m.tracer)})`;
     } else {
         return '.';
     }

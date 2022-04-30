@@ -98,6 +98,7 @@ function Container (signature, protoImplementation, container, instancename) {
     me.step_each_child = function () {
         this.children.forEach (childobject => {
             childobject.runnable.step ();
+	    childobject.runnable.route ();
         });
     };
 

@@ -101,12 +101,9 @@ function transpileHamburgerOrder (phrase) {
 }
 function handler_phraseParser (me, message) {
     let order = transpileHamburgerOrder (message.data);
-    console.log (order);
     if (order.short) {
-        console.log ('short');
         me.send ("order no choices", order);
     } else if (order.long) {
-        console.log ('long');
         me.send ("order with choices", order);
     } else {
         throw "internal error: order does not contain short nor long attribute";

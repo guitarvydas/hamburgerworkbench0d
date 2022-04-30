@@ -19,21 +19,19 @@
     <p id="status" >READY</p>
 
 
+    <!-- Component Operating System -->
+    <script src="cos.js"></script>
+
+    <!-- Ohm-JS -->
     <script src="https://unpkg.com/ohm-js@16/dist/ohm.min.js"></script>
-    <script src="queue.js"></script>
-    <script src="message.js"></script>
-    <script src="routing.js"></script>
-    <script src="step.js"></script>
-    <script src="find_connection.js"></script>
-    <script src="find_connection_in__me.js"></script>
-    <script src="handling.js"></script>
-    <script src="containerDeliver.js"></script>
-    <script src="runnable.js"></script>
+
+    <!-- Components for this app (see, also, hamburgerworkbench0d.drawio) -->
     <script src="htmlbutton.js"></script>
     <script src="phrasefaker.js"></script>
     <script src="phraseparser.js"></script>
     <script src="ordertaker.js"></script>
     <script src="testbench.js"></script>
+
     <script>
       
       var testBench = new TestBench (null);
@@ -41,7 +39,6 @@
 
       function buttonhandler () {
           htmlbutton.handler (htmlbutton, null);
-	  console.log (htmlbutton.hasOutputs ());
           htmlbutton.container.wakeup ();
           let outs = testBench.outputs ();
 	  let order = outs [0].data;

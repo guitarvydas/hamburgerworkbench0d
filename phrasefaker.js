@@ -1,5 +1,4 @@
 function handler_phraseFaker (me, message) {
-    console.log (`phrase faker ${message}`);
     // first-order testing - does the phraseFaker work at all?
     //me.send ("short phrase", "I Want A Cheeseburger");
     me.send ("long phrase", "I Want A Hamburger With Ketchup And Bacon And Pickles");

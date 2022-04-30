@@ -80,9 +80,7 @@ function Container (signature, protoImplementation, container, instancename) {
         stepperFunction (this);
     },
     me.self_first_step_with_input = function () {
-        console.log (`first_step_with_input 0 ${this.name}`);
         if (! this.inputQueue.empty ()) {
-            console.log (`first_step_with_input 1 ${this.name}`);
             let m = this.inputQueue.dequeue ();
             this.handler (this, m);
         }

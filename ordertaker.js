@@ -55,7 +55,6 @@ function OrderTaker (container, instancename) {
     me.deliver_input_from_container_input_to_child_input = deliver_input_from_container_input_to_child_input;
     me.deliver_input_from_container_input_to_me_output = deliver_input_from_container_input_to_me_output;
     me.handler = function (me, message) {
-        console.log (`handler ${this.name}`);
         deliverInputMessageToAllChildrenOfSelf (me, message);
     }
     return me;

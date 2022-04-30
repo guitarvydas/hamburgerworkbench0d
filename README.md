@@ -1,5 +1,7 @@
 hamburgerworkbench0d
 
+Load "hamburgerworkbench0d.html" into a browser and hit the "hamburger" button.
+
 0D => zero dependency (composable)
 
 A (very simple) example of creating an HTML app using 0D components.
